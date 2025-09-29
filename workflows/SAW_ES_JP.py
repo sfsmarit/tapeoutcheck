@@ -1,12 +1,11 @@
 from .models import Task, Flow
-from services.design_review import create_DR_meeting
-from services.purchase_order import create_PO_request_email
+from services.email import get_PO_request_mailto_link
 
 
 before_DR = Flow(
     gate=Task("Design Review 実施"),
     workflows=[
-        Task("Design Review 会議設定", button={":material/group:": create_DR_meeting}),
+        Task(":material/group: Design Review 会議設定"),
         Task("SAP 登録シートを記入して担当者に連絡"),
         Task("Design Review Check"),
     ],
@@ -23,7 +22,7 @@ before_DR = Flow(
 before_CAD_submission = Flow(
     gate=Task("CAD 提出"),
     workflows=[
-        Task("PO 発行依頼", button={":material/mail:": create_PO_request_email}),
+        Task("PO 発行依頼", link=get_PO_request_mailto_link(), icon=":material/email:"),
         Task("マニュアルチェック依頼"),
         Task("マニュアルチェック実施"),
         Task("Mask Assembly Utility 実施"),

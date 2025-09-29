@@ -6,8 +6,9 @@ import streamlit as st
 @dataclass
 class Task:
     name: str
-    link: str | Callable | None = None
-    button: dict[str, Callable] | None = None
+    link: str | None = None
+    button: Callable | None = None
+    icon: str = ":material/link:"
 
     def create(self):
         cols = st.columns([6, 1])
@@ -18,11 +19,10 @@ class Task:
 
         with cols[1]:
             if self.link:
-                st.markdown(f'<a href="{self.link}">:material/link:</a>', unsafe_allow_html=True)
+                st.markdown(f'<a href="{self.link}">{self.icon}</a>', unsafe_allow_html=True)
             if self.button:
-                for label, func in self.button.items():
-                    if st.button(label=label):
-                        func()
+                if st.button(self.icon):
+                    self.button()
                 
 
 @dataclass
