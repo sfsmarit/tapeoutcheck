@@ -1,5 +1,5 @@
 from .models import Task, Flow
-from services.email import get_PO_request_mailto_link
+from services.email import create_POreq_mailto
 
 
 before_DR = Flow(
@@ -22,7 +22,7 @@ before_DR = Flow(
 before_CAD_submission = Flow(
     gate=Task("CAD 提出"),
     workflows=[
-        Task("PO 発行依頼", link=get_PO_request_mailto_link(), icon=":material/email:"),
+        Task("PO 発行依頼", link=create_POreq_mailto(), icon=":material/email:"),
         Task("マニュアルチェック依頼"),
         Task("マニュアルチェック実施"),
         Task("Mask Assembly Utility 実施"),

@@ -1,24 +1,8 @@
-import urllib.parse
+from utils import create_mailto
 
 
-def get_mailto_link(
-    to: list[str],
-    cc: list[str] = [],
-    subject: str = "",
-    body: list[str] = [],
-) -> str:
-    body_text = urllib.parse.quote('\n'.join(body))
-    result = f"mailto:{';'.join(to)}?body={body_text}"
-    if cc:
-        result += "&cc=" + ';'.join(cc)
-    if subject:    
-        result += f"&subject={subject}"
-    return result
-
-
-
-def get_PO_request_mailto_link() -> str:
-    return get_mailto_link(
+def create_POreq_mailto() -> str:
+    return create_mailto(
         to=[
             "hogehoge@gmail.com",
         ],
