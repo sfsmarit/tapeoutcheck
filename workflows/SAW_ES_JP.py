@@ -1,15 +1,17 @@
-from .task import Task, Taskblock
+from .models import Task, Flow
+from services.design_review import create_DR_meeting
+from services.purchase_order import create_PO_request_email
 
 
-before_DR = Taskblock(
+before_DR = Flow(
     gate=Task("Design Review 実施"),
-    steps=[
-        Task("モジュールチームと特性合意"),
+    workflows=[
+        Task("Design Review 会議設定", button={":material/group:": create_DR_meeting}),
         Task("SAP 登録シートを記入して担当者に連絡"),
         Task("Design Review Check"),
     ],
     skyfoundry=[
-        Task("プロセスバリアントとファイルの詳細"),
+        Task("プロセスバリアントとファイルの詳細", link="https://www.nissan.co.jp/"),
         Task("Die Map/Mask Lauout リクエスト"),
         Task("1S/PCM リクエスト"),
         Task("Process Recipe リクエスト"),
@@ -18,10 +20,10 @@ before_DR = Taskblock(
     agile=[],
 )
 
-before_CAD_submission = Taskblock(
+before_CAD_submission = Flow(
     gate=Task("CAD 提出"),
-    steps=[
-        Task("PO 発行依頼"),
+    workflows=[
+        Task("PO 発行依頼", button={":material/mail:": create_PO_request_email}),
         Task("マニュアルチェック依頼"),
         Task("マニュアルチェック実施"),
         Task("Mask Assembly Utility 実施"),
@@ -42,16 +44,16 @@ before_CAD_submission = Taskblock(
     ]
 )
 
-after_CAD_submission = Taskblock(
+after_CAD_submission = Flow(
     gate=None,
-    steps=[
+    workflows=[
         Task("プローブ測定依頼書を SharePoint に格納"),
     ],
     skyfoundry=[],
     agile=[]
 )
 
-taskblocks = [
+flows = [
     before_DR,
     before_CAD_submission,
     after_CAD_submission,
