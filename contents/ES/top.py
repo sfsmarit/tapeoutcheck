@@ -47,6 +47,10 @@ with cols[1]:
 st.text_input("SAP Registration Sheet", placeholder="URL")
 
 
+# Create flowchart
+st.markdown("---")
+
+
 create_flowchart()
 
 

@@ -48,6 +48,9 @@ def create_home():
 
 
 def create_project():
+    if st.session_state["DEBUG"]:
+        st.session_state["mask_type"] = str(MaskType.ES)
+
     if st.session_state["mask_type"] == str(MaskType.ES):
         st.navigation([
             st.Page(page="contents/ES/top.py", title="Top", icon=":material/home:"),

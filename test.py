@@ -1,26 +1,23 @@
-
 import streamlit as st
-from supabase import create_client, Client
+from db.connection import get_engine, get_db, Base
+from db.repository import add_user, get_all_users
 
-# Supabase接続情報
-url = "https://celxjiaztmqihjapdncj.supabase.co"
-key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlbHhqaWF6dG1xaWhqYXBkbmNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkxMDQ2OTUsImV4cCI6MjA3NDY4MDY5NX0.jX0oNbCMTzaBVBSp_kwz9CnFtX694FvSHDI2BBsDYNw"  # ダッシュボードから取得
+# DB接続（SQLite）
+engine = get_engine(db_type="sqlite", db_name="test.db")
+Base.metadata.create_all(engine)  # テーブル作成
+session = get_db(engine)
 
-supabase: Client = create_client(url, key)
+# Streamlit UI
+st.title("User Management")
 
-# 入力フォーム
-st.title("TOチェックリスト")
-user = st.text_input("名前")
-item = st.text_input("項目")
-status = st.selectbox("ステータス", ["未完了", "完了"])
+name = st.text_input("Name")
+age = st.number_input("Age", min_value=0, step=1)
 
-if st.button("保存"):
-    data = {
-        "user": user,
-        "item": item,
-        "status": status
-    }
-    res = supabase.table("test").insert(data).execute()
-    print(res)
+if st.button("Add User"):
+    user = add_user(session, name, age)
+    st.success(f"Added user: {user.name} (ID: {user.id})")
 
-# データ表示
+st.subheader("All Users")
+users = get_all_users(session)
+for user in users:
+    st.write(f"ID: {user.id}, Name: {user.name}, Age: {user.age}")
