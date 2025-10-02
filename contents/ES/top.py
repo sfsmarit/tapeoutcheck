@@ -1,7 +1,8 @@
 import streamlit as st
 
-from workflows import create_flowchart
 from components.progress_bar import create_progress_bar
+
+from workflows import ES_JP
 
 
 # Designer
@@ -21,7 +22,15 @@ st.text_input("SAP Registration Sheet", placeholder="URL")
 st.markdown("---")
 
 
-create_flowchart()
+if True:
+    flows = ES_JP.workflows
 
+flows[0].create_header()
+st.markdown("---")
 
-create_progress_bar()
+statuses = []
+for flow in flows:
+    flow.create_components()
+    statuses += [task.data.status for task in flow.tasks]
+
+create_progress_bar(statuses)    

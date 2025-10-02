@@ -2,9 +2,9 @@ import streamlit as st
 
 sp = "&nbsp;"
 
-def create_progress_bar():
-    n_completed = sum(v for v in st.session_state.tasks.values())
-    n_tasks = len(st.session_state.tasks)
+def create_progress_bar(values: list[bool]):
+    n_completed = sum(v for v in values)
+    n_tasks = len(values)
     progress =  n_completed / n_tasks 
 
     st.markdown(f"""
