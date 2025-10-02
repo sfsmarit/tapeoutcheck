@@ -1,9 +1,9 @@
-from .models import Task, Flow
+from components.workflow import WorkFlow, Task
 from services.email import create_POreq_mailto
 
 
-flows = [
-    Flow(
+workflows = [
+    WorkFlow(
         gate=Task("Design Review 実施"),
         items={
             "Workflow": [
@@ -21,7 +21,7 @@ flows = [
             "Agile": [],
         }
     ),
-    Flow(
+    WorkFlow(
         gate=Task("CAD 提出"),
         items={
             "Workflow": [
@@ -46,7 +46,7 @@ flows = [
             ]
         }
     ),
-    Flow(
+    WorkFlow(
         gate=None,
         items={
             "Workflow": [

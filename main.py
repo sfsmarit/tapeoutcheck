@@ -1,14 +1,22 @@
 import streamlit as st
 
-from contents.home import create_home, create_project
+from state import state
+state.init()
+
+from contents.home.header import create_header
+from contents.home.tapeout_finder import create_tapeout_finder
+from contents.home.pages import create_pages
 
 
-st.session_state["DEBUG"] = True
+page_title = "SAW Tape-Out Checklist"
+st.set_page_config(page_title=page_title, layout="wide")
+st.title(page_title)
 
+st.markdown("---")
+create_header()
+st.markdown("---")
 
-st.set_page_config(page_title="Tape-Out Checklist", page_icon=":white_check_mark:")
-
-if st.session_state["DEBUG"] or st.session_state.get("project_selected", False):     
-    create_project()
+if not state.tapeout.has_valid_name():
+    create_tapeout_finder()
 else:
-    create_home()
+    create_pages()    

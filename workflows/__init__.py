@@ -1,11 +1,11 @@
 import streamlit as st
 
-from . import SAW_ES_JP
+from . import ES_JP
 
 
 def create_flowchart():
     if True:
-        flows = SAW_ES_JP.flows
+        flows = ES_JP.workflows
 
     flows[0].create_header()
     st.markdown("---")

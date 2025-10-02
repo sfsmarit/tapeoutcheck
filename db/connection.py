@@ -1,24 +1,23 @@
-from typing import Literal
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker
+
+from utils.enums import DBType
+import config 
+
+from .models import Base
 
 
-Base = declarative_base()
+# Create engine
+if config.DB_TYPE == DBType.MARIADB:
+    engine = create_engine(f"mysql+pymysql://{config.USER}:{config.PASSWORD}@{config.HOST}:{config.PORT}/{config.DB_NAME}", echo=True)
+elif config.DB_TYPE == DBType.SQLITE:
+    engine = create_engine(f"sqlite:///{config.DB_NAME}", echo=True)
+else:
+    raise ValueError(f"Unsupported database type : {config.DB_TYPE}")
 
-def get_engine(db_type : Literal["sqlite", "mariadb"],
-               db_name: str,
-               user: str | None = None,
-               password: str | None = None,
-               host: str = "localhost",
-               port: int = 3306):
-    match db_type:
-        case "sqlite":
-            return create_engine(f"sqlite:///{db_name}", echo=True)
-        case "mariadb":
-            return create_engine(f"mysql+pymysql://{user}:{password}@{host}:{port}/{db_name}", echo=True)
-        case _:
-            raise ValueError(f"Unsupported database type : {db_type}")
+# Create tables
+Base.metadata.create_all(engine)
 
-def get_db(engine):
+def get_session():
     Session = sessionmaker(bind=engine)
     return Session()

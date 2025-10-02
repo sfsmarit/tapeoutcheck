@@ -1,4 +1,10 @@
+import hashlib
 import urllib.parse
+
+
+def generate_sha256_hash(text: str) -> str:
+    """Returns 64 string hash"""
+    return hashlib.sha256(text.encode()).hexdigest()
 
 
 def create_mailto(
